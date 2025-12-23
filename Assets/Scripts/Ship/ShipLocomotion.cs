@@ -20,6 +20,7 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
     public float maxVelocity = 100;
 
     Vector3 deltaRotation;
+    [HideInInspector]
     public Vector3 maxDeltaRotation;
 
     float yawAmount;
@@ -30,8 +31,11 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
     float pitchTimer;
     float rollTimer;
 
+    [HideInInspector]
     public float maxYawTime;
+    [HideInInspector]
     public float maxPitchTime;
+    [HideInInspector]
     public float maxRollTime;
 
     float yawMultiplier = 1;
@@ -56,7 +60,9 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
     float maxRollReached;
     float maxDecayRollTimer;
 
+    [HideInInspector]
     public float upThrusterPower;
+    [HideInInspector]
     public float forwardThrusterPower;
 
     [SerializeField]
@@ -89,6 +95,11 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
 
     ShipThrusterManager shipThrusterManager;
 
+    int fuel = 100;
+
+    [SerializeField]
+    ShipInputComponent shipFuelInputComponent;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -106,11 +117,12 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
         if (beingPiloted)
         {
             shipRotationInput = playerInput.actions["ShipRotation"].ReadValue<Vector3>();
-            //shipMovementInput = playerInput.actions["ShipMovement"].ReadValue<Vector2>();
-            shipMovementInput = new Vector2(shipThrusterManager.forwardOutputValue, shipThrusterManager.upOutputValue);
+            shipMovementInput = playerInput.actions["ShipMovement"].ReadValue<Vector2>();
+            //shipMovementInput = new Vector2(shipThrusterManager.forwardOutputValue, shipThrusterManager.upOutputValue);
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             CalculateNewVelocity();
             CalculateNewRotation();
+            UpdateFuel();
         }
         else
         {
@@ -121,6 +133,12 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
         }
 
         CheckGrounded();
+    }
+
+    void UpdateFuel()
+    {
+        fuel = Mathf.RoundToInt(50 * Mathf.Sin(Time.time / 10)) + 50;
+        shipFuelInputComponent.output.value_float = fuel;
     }
 
     void CheckGrounded()
@@ -177,9 +195,9 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
         rb.AddRelativeForce(acceleration + damping);
         velocity = transform.InverseTransformDirection(rb.linearVelocity);
 
-        deltaRotation = new Vector3(pitchAmount, yawAmount, rollAmount) * Time.fixedDeltaTime * rotationSensitivity;
+        deltaRotation = new Vector3(-pitchAmount, yawAmount, rollAmount) * Time.fixedDeltaTime * rotationSensitivity;
 
-        Quaternion targetRotation =  Quaternion.Euler(deltaRotation) * rb.rotation;
+        Quaternion targetRotation = rb.rotation * Quaternion.Euler(deltaRotation);
         rb.MoveRotation(targetRotation);
 
         //   Quaternion targetRotation = rb.rotation * Quaternion.Euler(new Vector3(-shipRotationInput.y, shipRotationInput.x, shipRotationInput.z) * Time.fixedDeltaTime * yThrusterSensitivity);

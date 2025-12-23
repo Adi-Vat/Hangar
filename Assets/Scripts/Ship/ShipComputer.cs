@@ -6,6 +6,7 @@ public class ShipComputer : MonoBehaviour
 
     public ShipOutputComponent upThruster;
     public ShipOutputComponent forwardThruster;
+    public ShipOutputComponent yawThruster;
     public ShipInputComponent shipVelocity;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -37,8 +37,6 @@ public class JoystickBehaviour : MonoBehaviour
     int middleLightIndexX;
     int middleLightIndexY;
 
-    
-
     private void Awake()
     {
         shipInputComponent = GetComponent<ShipInputComponent>();
