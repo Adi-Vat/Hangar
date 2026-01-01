@@ -6,10 +6,9 @@ using UnityEngine.InputSystem;
 
 public class ShipLocomotion : MonoBehaviour, IInteractable
 {
-    
+    // x: yaw, y: pitch, z:roll
     Vector3 shipRotationInput;
     // x: forward force, y: upwards force
-    [SerializeField]
     Vector2 shipMovementInput;
 
     [HideInInspector]
@@ -100,6 +99,9 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
     [SerializeField]
     ShipInputComponent shipFuelInputComponent;
 
+    [SerializeField]
+    bool keyboardInput;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -116,9 +118,17 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
     {
         if (beingPiloted)
         {
-            shipRotationInput = playerInput.actions["ShipRotation"].ReadValue<Vector3>();
-            shipMovementInput = playerInput.actions["ShipMovement"].ReadValue<Vector2>();
-            //shipMovementInput = new Vector2(shipThrusterManager.forwardOutputValue, shipThrusterManager.upOutputValue);
+            if (keyboardInput)
+            {
+                shipRotationInput = playerInput.actions["ShipRotation"].ReadValue<Vector3>();
+                shipMovementInput = playerInput.actions["ShipMovement"].ReadValue<Vector2>();
+            }
+            else
+            {
+                shipMovementInput = new Vector2(shipThrusterManager.forwardOutputValue, shipThrusterManager.upOutputValue);
+                shipRotationInput = new Vector3(shipThrusterManager.yawOutputValue, shipThrusterManager.pitchOutputValue, shipThrusterManager.rollOutputValue);
+            }
+               
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             CalculateNewVelocity();
             CalculateNewRotation();
@@ -414,6 +424,8 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
 
     public void ExitShip(PlayerInteraction player)
     {
+        if (!isGrounded) return;
+
         player.ExitShip(shipExit.position);
     }
 

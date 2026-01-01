@@ -11,6 +11,6 @@ Input module --Vector3--> ship computer --|--float--> output module
                                           |--float--> output module  
 </pre>
 The ship's computer stores relationships between input and output modules.  
-The individual behaviour scripts for input modules can generate bools, floats, vector2s, vector3s. However, depending on the ControlInputValueOption selected (Button, OneAxis, TwoAxis, ThreeAxis), automatically fit to a Vector3 that is passed to the `ShipInputComponent` class.
+The individual behaviour scripts for input modules can generate bools, floats, vector2s, vector3s: depending on the ControlInputValueOption selected (Button, OneAxis, TwoAxis, ThreeAxis). This value is then automatically fit to a Vector3 which is passed to the `ShipInputComponent` class.
 `ShipModuleManager` then checks in a list of `InputOutputConnector`s and gathers data from the inputs, splits it, and sends it to each output.
 

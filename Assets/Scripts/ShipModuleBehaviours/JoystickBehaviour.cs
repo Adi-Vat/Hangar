@@ -1,5 +1,6 @@
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(ShipInputComponent))]
 public class JoystickBehaviour : MonoBehaviour
@@ -26,13 +27,18 @@ public class JoystickBehaviour : MonoBehaviour
     //[SerializeField]
     //ControlInput.ControlInputValueOptions outputValueType;
 
+    [SerializeField]
     float xAngle;
+    [SerializeField]
     float zAngle;
 
     [SerializeField]
     IndicatorLightBehaviour[] X_Lights;
     [SerializeField]
     IndicatorLightBehaviour[] Y_Lights;
+
+    [SerializeField]
+    Vector3 directionToHand;
 
     int middleLightIndexX;
     int middleLightIndexY;
@@ -54,17 +60,22 @@ public class JoystickBehaviour : MonoBehaviour
         // Gets a direction that the joystick should be pointing in
         // Get the rotation required to get to this direction
         // Rotate the joystick accordingly with clamping
-        Vector3 directionToHand = (hand.position - stick.transform.position).normalized;
-
-        zAngle = 0;
+        //(x1,y1,z1) - (x2,y2,z2) = (dx,dy,dz)
+        // 
         
-        xAngle = Vector2.SignedAngle(new Vector2(directionToHand.z, directionToHand.y), new Vector2(transform.up.z, transform.up.y));
+        directionToHand = (hand.position - stick.position);
+        // Convert direction to hand form local space to world space through rotation
+        directionToHand = transform.InverseTransformDirection(directionToHand).normalized;
+        zAngle = 0;
+
+        // blergh
+        xAngle = -Vector3.SignedAngle(new Vector3(0, directionToHand.y, directionToHand.z), new Vector3(0, transform.up.y, transform.up.z), transform.right);
         xAngle = Mathf.Clamp(xAngle, -maxRotationDegrees, maxRotationDegrees);
         if (Mathf.Abs(xAngle) < deadZoneDegrees) xAngle = 0;
 
         if (joystickType == ControlInput.ControlInputValueOptions.TwoAxis)
         {
-            zAngle = Vector2.SignedAngle(new Vector2(directionToHand.x, directionToHand.y), new Vector2(transform.up.x, transform.up.y));
+            zAngle = -Vector3.SignedAngle(new Vector3(0, directionToHand.y, directionToHand.x), new Vector3(0, transform.up.y, transform.up.x), transform.forward);
             zAngle = Mathf.Clamp(zAngle, -maxRotationDegrees, maxRotationDegrees);
             if (Mathf.Abs(zAngle) < deadZoneDegrees) zAngle = 0;
 

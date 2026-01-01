@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField]
     PlayerInput playerInput;
 
     float interactButtonValue;

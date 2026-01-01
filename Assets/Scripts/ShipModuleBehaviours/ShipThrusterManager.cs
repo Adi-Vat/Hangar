@@ -7,14 +7,18 @@ public class ShipThrusterManager : MonoBehaviour
 
     ShipOutputComponent forwardOutput;
     ShipOutputComponent upOutput;
+    ShipOutputComponent pitchOutput;
     ShipOutputComponent yawOutput;
+    ShipOutputComponent rollOutput;
 
     [SerializeField]
     ShipComputer shipComputer;
 
     public float forwardOutputValue;
     public float upOutputValue;
+    public float pitchOutputValue;
     public float yawOutputValue;
+    public float rollOutputValue;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -22,7 +26,9 @@ public class ShipThrusterManager : MonoBehaviour
         shipLocomotion = GetComponentInParent<ShipLocomotion>();
         forwardOutput = shipComputer.forwardThruster;
         upOutput = shipComputer.upThruster;
+        pitchOutput = shipComputer.pitchThruster;
         yawOutput = shipComputer.yawThruster;
+        rollOutput = shipComputer.rollThruster;
         GetThrusters();
         ApplyThrusterValues();
     }
@@ -31,7 +37,9 @@ public class ShipThrusterManager : MonoBehaviour
     {
         forwardOutputValue = (forwardOutput != null) ? forwardOutput.inputValue : 0;
         upOutputValue = (upOutput != null) ? upOutput.inputValue : 0;
+        pitchOutputValue = (pitchOutput != null) ? pitchOutput.inputValue : 0;
         yawOutputValue = (yawOutput != null) ? yawOutput.inputValue : 0;
+        rollOutputValue = (rollOutput != null) ? rollOutput.inputValue : 0;
     }
 
     void GetThrusters()
