@@ -6,6 +6,8 @@ public class ShipModuleManager : MonoBehaviour
     [SerializeField]
     InputOutputConnector[] connectors;
 
+    public bool editingShip;
+
     private void Update()
     {
         ApplyInputsToOutputs();

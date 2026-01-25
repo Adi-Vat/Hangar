@@ -76,7 +76,8 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
 
     Collider[] colliders;
 
-    Rigidbody rb;
+    [HideInInspector]
+    public Rigidbody rb;
 
     [SerializeField]
     bool beingPiloted;
@@ -418,7 +419,7 @@ public class ShipLocomotion : MonoBehaviour, IInteractable
 
     public void EnterShip(PlayerInteraction player)
     {
-        player.EnterShip(pilotSeat);
+        player.EnterShip(pilotSeat, this);
         
     }
 

@@ -73,6 +73,7 @@ public class JoystickBehaviour : MonoBehaviour
         Vector3 localUp = new Vector3(0, 1, 0);
         Vector3 localRight = new Vector3(1, 0 ,0);
         Vector3 forwardDirectionToHand = new Vector3(0, localDirToHand.y, localDirToHand.z);
+        // get angle between z direction to hand and the local up direction.
         xAngle = -Vector3.SignedAngle(forwardDirectionToHand, localUp, localRight);
 
         xAngle = Mathf.Clamp(xAngle, -maxRotationDegrees, maxRotationDegrees);

@@ -62,7 +62,7 @@ public class PlayerInteraction : MonoBehaviour
         Debug.DrawRay(m_cam.transform.position, m_cam.transform.forward * interactionDistance, Color.red, 3f);
     }
 
-    public void EnterShip(Transform pilotSeat)
+    public void EnterShip(Transform pilotSeat, ShipLocomotion ship)
     {
         transform.parent = pilotSeat.transform;
         rb.isKinematic = true;
@@ -71,8 +71,9 @@ public class PlayerInteraction : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         m_cam.transform.localRotation = Quaternion.identity;
-        playerMovement.pilotingShip = true;
         gravityBody.canAddForces = false;
+
+        playerMovement.currentShip = ship;
     }
 
     public void ExitShip(Vector3 exitPosition)
@@ -82,7 +83,8 @@ public class PlayerInteraction : MonoBehaviour
         rb.isKinematic = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         GetComponent<Collider>().enabled = true;
-        playerMovement.pilotingShip = false;
         gravityBody.canAddForces = true;
+
+        playerMovement.currentShip = null;
     }
 }
