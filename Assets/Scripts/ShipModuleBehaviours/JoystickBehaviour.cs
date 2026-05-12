@@ -21,8 +21,8 @@ public class JoystickBehaviour : MonoBehaviour
 
     [SerializeField]
     bool thisGrasped;
-    [SerializeField]
-    Transform hand;
+    
+    public Transform hand;
 
     //[SerializeField]
     //ControlInput.ControlInputValueOptions outputValueType;
